@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+site/
+docs/index.md
+uv.lock
+
+# Dataset — ne pas versionner les images
+DATA/
+
+# Dossier d'essais temporaires
+ESSAI/
+
+# Checkpoints modèles lourds
+*.pth
+*.pt
+*.onnx
+
+# Images
+*.png
+*.jpg
+*.jpeg
+
+# Outputs notebooks
+.ipynb_checkpoints/
