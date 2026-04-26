@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://jiblc.github.io/TP_composant_IA/kpi/index_backup/">
+        <link rel="canonical" href="https://jiblc.github.io/TP_composant_IA/kpi/index_backup1/">
       
       
       
@@ -684,6 +684,41 @@
 <li><strong>Objective</strong>: Ensure at least 20% of samples for each defect type.</li>
 <li><strong>Phase</strong>: Construction dataset.</li>
 </ul>
+<h2 id="4-inference-latency">4. Inference Latency</h2>
+<ul>
+<li><strong>Description</strong>: Average wall-clock time between image arrival and the production of a prediction by the AI component, on the target deployment hardware.</li>
+<li><strong>Metadata</strong>: <code>latency_ms</code>, <code>hardware_target</code>, <code>batch_size</code>.</li>
+<li><strong>Objective</strong>: Median latency below 200 ms per image, with 95th percentile below 350 ms, on the operational target hardware.</li>
+<li><strong>Phase</strong>: Evaluation, Operation.</li>
+</ul>
+<h2 id="5-uncertainty-calibration">5. Uncertainty Calibration</h2>
+<ul>
+<li><strong>Description</strong>: Alignment between the predicted confidence scores and the empirical accuracy. A well-calibrated model that predicts 0.8 for a class should be correct ~80% of the time.</li>
+<li><strong>Metadata</strong>: <code>expected_calibration_error</code>, <code>reliability_diagram</code>, <code>n_bins</code>.</li>
+<li><strong>Objective</strong>: Expected Calibration Error (ECE) below 0.05 on the standard evaluation set.</li>
+<li><strong>Phase</strong>: Evaluation, Operation.</li>
+</ul>
+<h2 id="6-out-of-distribution-monitoring">6. Out-of-Distribution Monitoring</h2>
+<ul>
+<li><strong>Description</strong>: Capacity of the component to flag inputs that lie outside the operational design domain (ODD) — both synthetic OOD perturbations and real OOD samples (unseen weld geometries, lighting regimes, sensor noise).</li>
+<li><strong>Metadata</strong>: <code>ood_score</code>, <code>evaluation_set</code> (<code>synthetic</code> | <code>real</code>), <code>auroc</code>.</li>
+<li><strong>Objective</strong>: AUROC ≥ 0.90 for OOD detection on both synthetic (<code>OOD_Syn</code>) and real (<code>OOD_Real</code>) evaluation sets.</li>
+<li><strong>Phase</strong>: Evaluation, Operation.</li>
+</ul>
+<h2 id="7-generalization">7. Generalization</h2>
+<ul>
+<li><strong>Description</strong>: Stability of operational and ML performance metrics across designed evaluation sets that vary one or more nuisance factors (e.g., weld type, illumination, viewpoint) while staying within the ODD.</li>
+<li><strong>Metadata</strong>: <code>op_g</code>, <code>ml_g</code>, <code>scenario_id</code>, <code>nuisance_factor</code>.</li>
+<li><strong>Objective</strong>: Operational performance (<code>OP_g</code>) and ML performance (<code>ML_g</code>) degradation below 10% relative to the reference evaluation set.</li>
+<li><strong>Phase</strong>: Evaluation.</li>
+</ul>
+<h2 id="8-data-drift">8. Data-Drift</h2>
+<ul>
+<li><strong>Description</strong>: Detection of distributional drift between the training data distribution and the live operational data, in order to trigger re-evaluation or retraining of the component.</li>
+<li><strong>Metadata</strong>: <code>drift_score</code>, <code>op_d</code>, <code>ood_d</code>, <code>time_window</code>.</li>
+<li><strong>Objective</strong>: AUROC ≥ 0.85 for drift detection over a rolling 7-day operational window.</li>
+<li><strong>Phase</strong>: Operation.</li>
+</ul>
 <h2 id="kpi-mapping-to-lifecycle-phases">KPI Mapping to Lifecycle Phases</h2>
 <table>
 <thead>
@@ -724,10 +759,93 @@
 <td style="text-align: center;">X</td>
 <td style="text-align: center;">X</td>
 </tr>
+<tr>
+<td>Uncertainty Calibration</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr>
+<td>OOD Monitoring</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr>
+<td>Generalization</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Data-Drift</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
 </tbody>
 </table>
 <h2 id="kpi-interface-python">KPI Interface (Python)</h2>
-<p>The following code defines how KPIs are calculated and tracked.</p>
+<p>The following code defines how KPIs are calculated and tracked. Each KPI is implemented as a concrete subclass of <code>KPIInterface</code>, exposing a <code>calculate_metric()</code> method that returns one or more numeric scores and a <code>get_kpi_metadata()</code> method that documents the KPI's parameters and units.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">KPIInterface</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interface for KPI calculation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">predictions</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate a specific metric (e.g., F1-score, robustness).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_kpi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return metadata associated with the KPI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RobustnessKPI</span><span class="p">(</span><span class="n">KPIInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    KPI implementation for robustness to flash.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">predictions</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># Simulate calculation</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;robustness_score&quot;</span><span class="p">:</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_kpi_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="s2">&quot;flash_intensity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="s2">&quot;percentage&quot;</span>
+        <span class="p">}</span>
+</code></pre></div>
+<h3 id="usage-example">Usage example</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tp_welding.interfaces.kpi</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobustnessKPI</span>
+
+<span class="n">kpi</span> <span class="o">=</span> <span class="n">RobustnessKPI</span><span class="p">()</span>
+
+<span class="c1"># Toy inputs — replace with real evaluation data and model predictions</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sample_1&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_2&quot;</span><span class="p">]</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;pred_1&quot;</span><span class="p">,</span> <span class="s2">&quot;pred_2&quot;</span><span class="p">]</span>
+
+<span class="n">score</span> <span class="o">=</span> <span class="n">kpi</span><span class="o">.</span><span class="n">calculate_metric</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">kpi</span><span class="o">.</span><span class="n">get_kpi_metadata</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">score</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metadata: </span><span class="si">{</span><span class="n">metadata</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Score:    {&#39;robustness_score&#39;: 0.94}</span>
+<span class="c1"># Metadata: {&#39;parameter&#39;: &#39;flash_intensity&#39;, &#39;dimension&#39;: &#39;percentage&#39;}</span>
+</code></pre></div>
 
 
 
