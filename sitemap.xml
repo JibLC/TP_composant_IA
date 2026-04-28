@@ -2,50 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/api_reference/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/contributing/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/user_guide/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/architecture/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
+    </url>
+    <url>
+         <loc>https://jiblc.github.io/TP_composant_IA/architecture/1a_operations/</loc>
+         <lastmod>2026-04-28</lastmod>
+    </url>
+    <url>
+         <loc>https://jiblc.github.io/TP_composant_IA/architecture/1b_entrainement/</loc>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/architecture/index_backup1/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
+    </url>
+    <url>
+         <loc>https://jiblc.github.io/TP_composant_IA/architecture/index_backup2/</loc>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/artefacts/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/artefacts/index_backup/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/datasets/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/kpi/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/kpi/index_backup0/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
     <url>
          <loc>https://jiblc.github.io/TP_composant_IA/kpi/index_backup1/</loc>
-         <lastmod>2026-04-26</lastmod>
+         <lastmod>2026-04-28</lastmod>
     </url>
 </urlset>
