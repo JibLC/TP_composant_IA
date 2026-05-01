@@ -820,32 +820,52 @@
 to which various artefacts are associated</p>
 <h2 id="operator">Operator</h2>
 <p>As an operations centered developement we shall consider first the point of view of the operator.
-As the primary human responsible of the weld defaults detection and main user of the AI component, the operator has the folowwing requirements:
-- Visualization of:
-    - the various weld images:
-        - the weld ID
-        - the weld type
-        - the localization of the weld defaults if any
-    - the prediction result:
-        - OK / KO / UNKNOWN status
-        - confidence score
-- Selection &amp; Validation:
-    - Selection (by finger touch) of the OK images (= weld without defaults)
-    - Validation of the selected images (= OK images)
-- Visualization of the following metrics:
-    - Latency vs acceptance limit
-    - the actual percentages of OK, KO &amp; UNKNOWN vs allowable limits
-    - the OOD detector metrics for each type of weld:
-        - measured luminosity vs ODD range
-        - blur level vs ODD range
-        - rotation vs ODD range
-        - weld position vs ODD range
-- Raise of Warning / Alarm in case the following events occur:
-    - AI component issues:
-        - Latency gets over allowable limit (something may have to be fixed on the AI component working conditions)
-    - Production line issues:
-        - percentage of KO or UNKNOWN gets over allowable limits for a certain weld type
-        - an ODD related metric gets OOD</p>
+As the primary human responsible of the weld defaults detection and main user of the AI component, the operator has the folowwing requirements:</p>
+<ul>
+<li>Visualization of:<ul>
+<li>the various weld images:<ul>
+<li>the weld ID</li>
+<li>the weld type</li>
+<li>the localization of the weld defaults if any</li>
+</ul>
+</li>
+<li>the prediction result:<ul>
+<li>OK / KO / UNKNOWN status</li>
+<li>confidence score</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Selection &amp; Validation:<ul>
+<li>Selection (by finger touch) of the OK images (= weld without defaults)</li>
+<li>Validation of the selected images (= OK images)</li>
+</ul>
+</li>
+<li>Visualization of the following metrics:<ul>
+<li>Latency vs acceptance limit</li>
+<li>the actual percentages of OK, KO &amp; UNKNOWN vs allowable limits</li>
+<li>the OOD detector metrics for each type of weld:<ul>
+<li>measured luminosity vs ODD range</li>
+<li>blur level vs ODD range</li>
+<li>rotation vs ODD range</li>
+<li>weld position vs ODD range</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Raise of Warning / Alarm in case the following events occur:<ul>
+<li>AI component issues:<ul>
+<li>Latency gets over allowable limit (something may have to be fixed on the AI component working conditions)</li>
+</ul>
+</li>
+<li>Production line issues:<ul>
+<li>percentage of KO or UNKNOWN gets over allowable limits for a certain weld type</li>
+<li>an ODD related metric gets OOD</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <p>2 screens should be used by the operator:</p>
 <h3 id="operator-screen-1-touch">Operator Screen 1 (touch):</h3>
 <p><img alt="Operator Screen 1 (touch)" src="screen%201%20%28touch%29.png" /></p>
