@@ -822,13 +822,16 @@ to which various artefacts are associated</p>
 <p>As an operations centered developement we shall consider first the point of view of the operator.
 As the primary human responsible of the weld defaults detection and main user of the AI component, the operator has the folowwing requirements:
 - Visualization of:
-    - the various weld images
-    - the prediction result
-    - the localization of the weld defaults if any
-    - the weld ID
-    - the weld type
-- Selection (by finger touch) of the OK images (= weld without defaults)
-- Validation of the selected images = (OK images) 
+    - the various weld images:
+        - the weld ID
+        - the weld type
+        - the localization of the weld defaults if any
+    - the prediction result:
+        - OK / KO / UNKNOWN status
+        - confidence score
+- Selection &amp; Validation:
+    - Selection (by finger touch) of the OK images (= weld without defaults)
+    - Validation of the selected images (= OK images)
 - Visualization of the following metrics:
     - Latency vs acceptance limit
     - the actual percentages of OK, KO &amp; UNKNOWN vs allowable limits
@@ -837,10 +840,12 @@ As the primary human responsible of the weld defaults detection and main user of
         - blur level vs ODD range
         - rotation vs ODD range
         - weld position vs ODD range
-- Raise of Warning / Alarm in case the following event occur:
-    - Latency gets over allowable limit (something may have to be fixed on the AI component working conditions)
-    - percentage of KO or UNKNOWN gets over allowable limits for a certain weld type (something may have to be fixed on the production line)
-    - an ODD related metric gets OOD (something may have to be fixed on the production line)</p>
+- Raise of Warning / Alarm in case the following events occur:
+    - AI component issues:
+        - Latency gets over allowable limit (something may have to be fixed on the AI component working conditions)
+    - Production line issues:
+        - percentage of KO or UNKNOWN gets over allowable limits for a certain weld type
+        - an ODD related metric gets OOD</p>
 <p>2 screens should be used by the operator:</p>
 <h3 id="operator-screen-1-touch">Operator Screen 1 (touch):</h3>
 <p><img alt="Operator Screen 1 (touch)" src="screen%201%20%28touch%29.png" /></p>
