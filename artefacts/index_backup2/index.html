@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://jiblc.github.io/TP_composant_IA/artefacts/index_backup/">
+        <link rel="canonical" href="https://jiblc.github.io/TP_composant_IA/artefacts/index_backup2/">
       
       
       
@@ -677,6 +677,36 @@
 <li><strong>Aggregation Method</strong>: Spatial aggregation of <code>probability_map</code> across a test set.</li>
 <li><strong>Audience</strong>: AI Developers for model refinement.</li>
 </ul>
+<h3 id="example-latency-profile">Example: Latency Profile</h3>
+<ul>
+<li><strong>Artefact</strong>: A boxplot of <code>latency_ms</code> per <code>hardware_target</code> and <code>batch_size</code>, with the 50th, 95th and 99th percentiles annotated against the operational SLA (200 ms target).</li>
+<li><strong>Aggregation Method</strong>: Per-hardware quantile aggregation across the operational evaluation set.</li>
+<li><strong>Audience</strong>: Production Engineers, Operations Lead.</li>
+</ul>
+<h3 id="example-calibration-reliability-diagram">Example: Calibration Reliability Diagram</h3>
+<ul>
+<li><strong>Artefact</strong>: A reliability diagram (predicted-vs-empirical confidence) accompanied by the Expected Calibration Error (ECE).</li>
+<li><strong>Aggregation Method</strong>: Binning predictions by confidence interval and computing per-bin accuracy.</li>
+<li><strong>Audience</strong>: AI Developers, Safety Officer.</li>
+</ul>
+<h3 id="example-ood-detection-report">Example: OOD Detection Report</h3>
+<ul>
+<li><strong>Artefact</strong>: ROC curves and AUROC tables for synthetic vs. real out-of-distribution detection benchmarks.</li>
+<li><strong>Aggregation Method</strong>: Per-evaluation-set AUROC aggregation, with a comparative summary across <code>OOD_Syn</code> and <code>OOD_Real</code>.</li>
+<li><strong>Audience</strong>: Safety Officer, AI Developers.</li>
+</ul>
+<h3 id="example-drift-trend-dashboard">Example: Drift Trend Dashboard</h3>
+<ul>
+<li><strong>Artefact</strong>: A time-series dashboard showing rolling drift scores (<code>drift_score</code>, <code>OP_d</code>, <code>OOD_d</code>) over a configurable operational window, with alert thresholds.</li>
+<li><strong>Aggregation Method</strong>: Sliding-window aggregation of operational predictions versus a reference distribution.</li>
+<li><strong>Audience</strong>: Operations Lead, MLOps Engineer.</li>
+</ul>
+<h3 id="example-generalization-scorecard">Example: Generalization Scorecard</h3>
+<ul>
+<li><strong>Artefact</strong>: A scorecard contrasting <code>OP_g</code> and <code>ML_g</code> across designed evaluation scenarios (varied weld types, illumination, viewpoints), with degradation flagged in red.</li>
+<li><strong>Aggregation Method</strong>: Per-scenario aggregation followed by relative comparison to the reference evaluation set.</li>
+<li><strong>Audience</strong>: AI Developers, Project Manager.</li>
+</ul>
 <h2 id="2-intended-usage-and-stakeholders">2. Intended Usage and Stakeholders</h2>
 <table>
 <thead>
@@ -702,6 +732,36 @@
 <td>Project Manager</td>
 <td>Track performance improvement across training iterations.</td>
 </tr>
+<tr>
+<td>Latency Profile</td>
+<td>Production Engineer</td>
+<td>Confirm the component meets real-time operational SLAs.</td>
+</tr>
+<tr>
+<td>Calibration Diagram</td>
+<td>Safety Officer</td>
+<td>Confirm that confidence scores can be trusted for downstream decisions.</td>
+</tr>
+<tr>
+<td>OOD Detection Report</td>
+<td>Safety Officer</td>
+<td>Demonstrate the component flags inputs outside the ODD.</td>
+</tr>
+<tr>
+<td>Drift Trend Dashboard</td>
+<td>Operations Lead</td>
+<td>Detect when the operational distribution diverges from training data.</td>
+</tr>
+<tr>
+<td>Generalization Scorecard</td>
+<td>AI Developer</td>
+<td>Identify scenarios where the model under-performs.</td>
+</tr>
+<tr>
+<td>Trust Score Summary</td>
+<td>Steering Committee</td>
+<td>Provide a single comparable trust score across submissions.</td>
+</tr>
 </tbody>
 </table>
 <h2 id="3-visual-representation-mock">3. Visual Representation (Mock)</h2>
@@ -710,25 +770,144 @@
         K1[Robustness]
         K2[Confidence]
         K3[Latency]
+        K4[Calibration]
+        K5[OOD Monitoring]
+        K6[Generalization]
+        K7[Data-Drift]
     end
 
     subgraph "Artefacts (Validation)"
         A1[Safety Dashboard]
         A2[Developer Report]
         A3[Management Summary]
+        A4[Operations Dashboard]
     end
 
     K1 --&gt; A1
     K2 --&gt; A1
     K2 --&gt; A2
-    K3 --&gt; A3</code></pre>
+    K3 --&gt; A4
+    K4 --&gt; A1
+    K4 --&gt; A2
+    K5 --&gt; A1
+    K6 --&gt; A2
+    K6 --&gt; A3
+    K7 --&gt; A4
+    K7 --&gt; A3</code></pre>
 <h2 id="4-phase-usage">4. Phase Usage</h2>
 <ul>
-<li><strong>Construction Dataset</strong>: Data diversity reports.</li>
-<li><strong>Training</strong>: Training loss and validation accuracy curves.</li>
-<li><strong>Evaluation</strong>: Final F1-score report, confusion matrix.</li>
-<li><strong>Operation</strong>: Real-time confidence monitoring and drift detection.</li>
+<li><strong>Construction Dataset</strong>: Data diversity reports, sample-coverage matrices.</li>
+<li><strong>Training</strong>: Training loss and validation accuracy curves, calibration diagrams on the validation split.</li>
+<li><strong>Evaluation</strong>: Final F1-score report, confusion matrix, OOD detection report, generalization scorecard, latency profile.</li>
+<li><strong>Operation</strong>: Real-time confidence monitoring, drift trend dashboard, latency SLA monitoring, OOD alerts.</li>
 </ul>
+<h2 id="5-trust-attribute-coverage">5. Trust-Attribute Coverage</h2>
+<p>Each artefact contributes evidence for one or more trust attributes of the ML-Trustworthy evaluation protocol. The matrix below indicates which artefact informs which attribute.</p>
+<table>
+<thead>
+<tr>
+<th>Artefact</th>
+<th style="text-align: center;">Performance</th>
+<th style="text-align: center;">Uncertainty</th>
+<th style="text-align: center;">Robustness</th>
+<th style="text-align: center;">OOD Monitoring</th>
+<th style="text-align: center;">Generalization</th>
+<th style="text-align: center;">Data-Drift</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Robustness Report</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Defect Heatmap</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>KPI Evolution</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Latency Profile</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Calibration Diagram</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>OOD Detection Report</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Drift Trend Dashboard</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+</tr>
+<tr>
+<td>Generalization Scorecard</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Trust Score Summary</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+<td style="text-align: center;">X</td>
+</tr>
+</tbody>
+</table>
+<p>The Trust Score Summary is the top-level artefact: it consolidates the per-attribute KPIs into a single rescaled score (cf. the aggregation methodology in the project evaluation protocol).</p>
+<h2 id="6-artefact-generation-pipeline">6. Artefact Generation Pipeline</h2>
+<p>The pipeline that turns raw KPI outputs into validation artefacts follows four stages:</p>
+<pre class="mermaid"><code>flowchart LR
+    M[Raw model&lt;br/&gt;predictions] --&gt; K[KPI calculation&lt;br/&gt;KPIInterface implementations]
+    K --&gt; N[Normalization&lt;br/&gt;scores in 0..1]
+    N --&gt; AG[Aggregation&lt;br/&gt;per attribute]
+    AG --&gt; AR[Artefact rendering&lt;br/&gt;graphs / dashboards / reports]</code></pre>
+<p>Each stage is reproducible from the raw predictions, which guarantees that any artefact can be regenerated for audit purposes.</p>
 
 
 
