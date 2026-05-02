@@ -709,32 +709,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#14-technical-team-data-scientists-ml-engineers" class="md-nav__link">
+  <a href="#14-technical-team-data-engineers-ml-engineers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.4 Technical Team (Data Scientists / ML Engineers)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#15-routing-preprocessing-report-technical-team" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.5 Routing &amp; Preprocessing Report (Technical Team)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#16-operator-efficiency-report-product-owner-quality-officer" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1.6 Operator Efficiency Report (Product Owner / Quality Officer)
+        1.4 Technical Team (Data Engineers / ML Engineers)
       
     </span>
   </a>
@@ -903,7 +881,7 @@
 - Operator<br />
 - Product Owner<br />
 - Quality &amp; Safety Officer<br />
-- Technical Team (Data Scientists / ML Engineers)<br />
+- Technical Team (Data Engineers / ML Engineers)<br />
 to which various artefacts are associated  </p>
 <h3 id="11-operator-production-line-op-120">1.1 Operator (Production Line - OP 120)</h3>
 <p>As an operations centered developement we shall consider first the point of view of the operator.
@@ -1030,9 +1008,15 @@ In addition to artefacts mainly dedicated to other stakeholders, the PO should h
 (Wireframe generated with Claude Design)</p>
 </li>
 </ul>
-<h3 id="14-technical-team-data-scientists-ml-engineers">1.4 Technical Team (Data Scientists / ML Engineers)</h3>
+<h3 id="14-technical-team-data-engineers-ml-engineers">1.4 Technical Team (Data Engineers / ML Engineers)</h3>
+<p>As part of the training phase, many diagrams should be produced by the Data Scientists to investigate each new dataset in terms of:
+- outliers
+- different types of point of view &amp; resolution of images
+- ODD criterias
+They may use in particular the DebiAI library built by IRT System X.
+Just to give a typical exemple, here is a typical artefact that shows how blur distribution &amp; threshold can be observed for various weld types:
+<img alt="Blur distribution &amp; threshold" src="Data_Engineer_blur_distrib.png" /></p>
 <ul>
-<li><strong>Artefact</strong>: Detailed technical report for model improvement and production monitoring.</li>
 <li><strong>Content</strong>:</li>
 <li><strong>During development</strong>: training loss curves, F1-score evolution per epoch, train/val gap (overfitting detection), data quality metrics (class distribution, annotation consistency, ODD coverage)</li>
 <li><strong>During evaluation</strong>: detailed confusion matrices, ECE and Brier score analysis, per-class and per-seam performance breakdown, robustness curves per perturbation type and intensity level, generalization performance on unseen seams (C19/C34/C101)</li>
@@ -1040,33 +1024,6 @@ In addition to artefacts mainly dedicated to other stakeholders, the PO should h
 <li><strong>KPIs used</strong>: all 13 KPIs at full granularity</li>
 <li><strong>Aggregation method</strong>: no aggregation for development/evaluation (raw metrics), moving averages and trend detection for operation monitoring</li>
 <li><strong>Phase</strong>: Training, Evaluation, Operation</li>
-</ul>
-<h3 id="15-routing-preprocessing-report-technical-team">1.5 Routing &amp; Preprocessing Report (Technical Team)</h3>
-<ul>
-<li><strong>Artefact</strong>: Detailed analysis of the routing and preprocessing pipeline behavior.</li>
-<li><strong>Content</strong>:</li>
-<li>Routing confusion matrix (true seam type vs assigned CNN)</li>
-<li>Routing accuracy per seam type</li>
-<li>Per-CNN performance comparison (F1-score, Recall NOK side by side for C20/C33/C102)</li>
-<li>Cross-CNN performance gap trend over time</li>
-<li>Unblur/un-rotate impact analysis (ΔF1 with/without, image quality before/after)</li>
-<li>Blur classification accuracy report</li>
-<li><strong>KPIs used</strong>: Routing Accuracy, Per-CNN Performance, Blur Detection Quality, Preprocessing Correction Quality</li>
-<li><strong>Aggregation method</strong>: per seam type breakdown, before/after comparison</li>
-<li><strong>Phase</strong>: Evaluation, Operation</li>
-</ul>
-<h3 id="16-operator-efficiency-report-product-owner-quality-officer">1.6 Operator Efficiency Report (Product Owner / Quality Officer)</h3>
-<ul>
-<li><strong>Artefact</strong>: Analysis of operator interaction effectiveness and sampling rules relevance.</li>
-<li><strong>Content</strong>:</li>
-<li>Operator correction rate (how often the operator overrides the system)</li>
-<li>Correction patterns (which seam types / conditions trigger the most corrections)</li>
-<li>Missed defect estimates from batch control</li>
-<li>Operator workload metrics (images reviewed per shift)</li>
-<li>Recommendations for sampling rules adjustment</li>
-<li><strong>KPIs used</strong>: Sampling Rules Efficiency, Performance (via batch control)</li>
-<li><strong>Aggregation method</strong>: per shift / per seam type aggregation, trend analysis</li>
-<li><strong>Phase</strong>: Operation</li>
 </ul>
 <h2 id="2-artefact-mapping-to-lifecycle-phases">2. Artefact Mapping to Lifecycle Phases</h2>
 <table>
