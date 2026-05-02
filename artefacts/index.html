@@ -982,17 +982,26 @@ The lower diagram shows what a typical rate of OK could look like</p>
 <p>A specific dashboard should be added to allow the operator to detect and raise warnings in case of data drift</p>
 <h3 id="12-product-owner">1.2 Product Owner</h3>
 <p>The Product Owner (PO) is the ultimate responsable of the AI component in all its aspects and all its phases (development, training, validation, operation, maintenance). As such he is part of the audience of any artefact created in the project.<br />
-In addition to artefacts mainly dedicated to other stakeholders, the PO should have its own specific dashboards that allows her/him to have an overview on the overall performance and level thrustworthiness of its AI component. We would typically consider a specific dashboard for each single phase as follows:</p>
+In addition to artefacts mainly dedicated to other stakeholders, the PO should have its own specific dashboards that allows her/him to have an overview on the overall performance and level thrustworthiness of its AI component.  </p>
 <ul>
-<li><strong>Artefact</strong>: Trust synthesis report for deployment go/no-go decision.</li>
+<li><strong>Artefact</strong>: Performance &amp; Trust synthesis reports for deployment go/no-go decision and regular operation follow-up.</li>
 <li><strong>Content</strong>:</li>
-<li>Radar chart of the 6 trust attributes (performance, uncertainty, robustness, OOD, generalization, data drift) — immediate visual overview</li>
+<li>For validation &amp; operation: Radar charts (one per phase &amp; version of the AI Component) of the 6 trust attributes (performance, uncertainty, robustness, OOD, generalization, data drift) — immediate visual overview</li>
 <li>Pass/fail status per attribute against defined thresholds</li>
 <li>Weighted global trust score for cross-version comparison</li>
 <li>Go/no-go recommendation</li>
 <li><strong>KPIs used</strong>: all 13 KPIs aggregated into trust attributes</li>
-<li><strong>Aggregation method</strong>: two-level approach — (1) pass/fail gate: each attribute must meet its minimum threshold, (2) weighted score: normalized KPIs combined with criticality-based weights (Performance ×3, OOD ×2, Robustness ×2, Uncertainty ×1, Generalization ×1, Drift ×1)</li>
-<li><strong>Phase</strong>: Evaluation</li>
+<li>
+<p><strong>Aggregation method</strong>: two-level approach — (1) pass/fail gate: each attribute must meet its minimum threshold, (2) weighted score: normalized KPIs combined with criticality-based weights (Performance ×3, OOD ×2, Robustness ×2, Uncertainty ×1, Generalization ×1, Drift ×1)</p>
+</li>
+<li>
+<p><strong>Phase</strong>: Evaluation<br />
+<img alt="Evaluation report" src="PO_Evaluation_report.png" /></p>
+</li>
+<li>
+<p><strong>Phase</strong>: Operation<br />
+<img alt="Evaluation report" src="PO_Operation_follow-up_dashboard.png" /></p>
+</li>
 </ul>
 <h3 id="13-quality-safety-officer">1.3 Quality &amp; Safety Officer</h3>
 <ul>
