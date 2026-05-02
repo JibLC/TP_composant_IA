@@ -1042,6 +1042,190 @@
 <p><strong>Conveyor routing</strong>: the physical piece is routed on the production line based on the final decision (OK → continue, NOK → reject, Unknown → manual inspection station).</p>
 <p><strong>Storage</strong>: all predictions, operator decisions, trust information, and images are stored for batch control and future retraining.</p>
 <p><strong>Batch Control</strong>: analyzes stored data in batches to detect systemic issues (e.g. abnormally high Unknown rate on a specific seam type, drift in confidence distributions).</p>
+<p>In addition to this BASE CASE Operation Architecture on which the all AI component is described, we propose as a possible optimisation, an architecture based on MIL (Multi Instance Learning) expected to allow the localisation of the defaults for the Operator and to be investigated further.</p>
+<p>The OPTIMIZATION approach implements a <strong>2-stage pipeline</strong> designed for weakly-supervised defect detection. Image-level labels (<code>OK</code> / <code>KO</code>) are the only supervision available — no defect bounding-box annotations exist, hence the choice of MIL (Multi-Instance Learning) for defect classification.</p>
+<ol>
+<li><strong>Stage 1 — Weld Localization</strong>: a lightweight detector finds the welding seam in the input image and outputs a bounding box <code>bbox_weld</code>.</li>
+<li><strong>ROI cropping</strong>: the image is cropped to <code>bbox_weld</code>, producing <code>image_ROI</code>.</li>
+<li><strong>Quality measurements on ROI only</strong>: blur and luminosity are computed on <code>image_ROI</code> (not on the full image) so that environmental clutter — background metal parts, secondary welds, shop lighting — does not bias the measurements.</li>
+<li><strong>Trustworthy modules</strong> (OOD detector, online monitoring) receive both the latent representation <strong>and</strong> features derived from <code>bbox_weld</code> (position, size, aspect ratio). Geometric drift in the bbox is itself a strong OOD signal (seam moved, occluded, partial framing).</li>
+<li><strong>Stage 2 — MIL defect classification on ROI</strong>: patches are extracted from <code>image_ROI</code> only; a frozen backbone produces patch embeddings; an attention-based MIL aggregator yields the final <code>OK / KO / UNKNOWN</code> decision and, when KO, a localized <code>bbox_defect</code> derived from the attention map.</li>
+</ol>
+<p>Reference libraries: <strong>YOLOv5</strong> (detection + backbone), <strong>PUNCC</strong> (uncertainty), <strong>OODeel</strong> (OOD), <strong>SAM</strong> (Segment Anything — used offline to bootstrap weld pseudo-labels).</p>
+<p>High-level data flow:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Input</th>
+<th>Module</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>image</td>
+<td>Weld Localizer (YOLOv5n)</td>
+<td><code>bbox_weld</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>image + <code>bbox_weld</code></td>
+<td>ROI Cropper</td>
+<td><code>image_ROI</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>image_ROI</code></td>
+<td>Blur Measure / Luminosity Measure</td>
+<td><code>blur_ROI</code>, <code>luminosity_ROI</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>image_ROI</code></td>
+<td>MIL Bag Builder</td>
+<td>patches</td>
+</tr>
+<tr>
+<td>5</td>
+<td>patches</td>
+<td>Backbone YOLOv5s-C3CA (frozen)</td>
+<td>latent embeddings</td>
+</tr>
+<tr>
+<td>6</td>
+<td>latent</td>
+<td>MIL Aggregator (attention pooling)</td>
+<td>bag score + attention map</td>
+</tr>
+<tr>
+<td>7</td>
+<td>bag score</td>
+<td>Predictor + UQ + OOD</td>
+<td><code>OK / KO / UNKNOWN</code> + scores</td>
+</tr>
+<tr>
+<td>8</td>
+<td>attention map</td>
+<td>Defect Localizer</td>
+<td><code>bbox_defect</code> (if KO)</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>bbox_weld</code>, <code>blur_ROI</code>, <code>luminosity_ROI</code>, OOD score</td>
+<td>Online Monitoring</td>
+<td>drift indicators</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart LR
+  classDef blue   fill:#4a90d9,stroke:#2c5f8a,color:#fff
+  classDef orange fill:#e67e22,stroke:#b35a0a,color:#fff
+  classDef green  fill:#27ae60,stroke:#1a7a42,color:#fff
+  classDef purple fill:#8e44ad,stroke:#6c3483,color:#fff
+
+  subgraph ACQ["Acquisition"]
+    direction TB
+    CONTEXT["Context (seam_id, resolution)"]
+    DATUM["Datum image 1920x1080 or 960x540"]
+    CONTEXT ~~~ DATUM
+  end
+
+  subgraph COLLECTION["Collection"]
+    SAMPLE["Sample"]
+  end
+
+  ACQ --&gt; SAMPLE
+
+  subgraph OPERATION["AI Component — Operation"]
+    direction LR
+
+    PREP["Preprocessor (resize, normalize)"]
+    PREP --&gt; WELD_LOC["Weld Localizer YOLOv5n - bbox_weld"]
+    WELD_LOC --&gt; ROI_CROP["ROI Cropper - image_ROI"]
+
+    ROI_CROP --&gt; BLUR["Blur Measure on image_ROI"]
+    ROI_CROP --&gt; LUMI["Luminosity Measure on image_ROI"]
+
+    ROI_CROP --&gt; BAG["MIL Bag Builder (patches)"]
+    BAG --&gt; BACKBONE["Backbone YOLOv5s-C3CA frozen"]
+    BACKBONE --&gt; LATENT["Latent Space"]
+    LATENT --&gt; MILPOOL["MIL Aggregator attention pooling"]
+    MILPOOL --&gt; PREDICTOR["Predictor OK / KO"]
+    MILPOOL --&gt; UQ["Uncertainty Quantifier PUNCC"]
+    MILPOOL --&gt; OOD["OOD Detector OODeel"]
+    MILPOOL --&gt; ATTN["Attention Map"]
+
+    WELD_LOC --&gt; OOD
+    WELD_LOC --&gt; MONITOR["Online Monitoring"]
+    BLUR --&gt; MONITOR
+    LUMI --&gt; MONITOR
+    OOD --&gt; MONITOR
+
+    PREDICTOR --&gt; DEFECT_LOC["Defect Localizer - bbox_defect"]
+    ATTN --&gt; DEFECT_LOC
+
+    class WELD_LOC,ROI_CROP purple
+    class PREP,BAG orange
+    class BACKBONE,LATENT,MILPOOL,PREDICTOR blue
+    class UQ,OOD,MONITOR,DEFECT_LOC,BLUR,LUMI green
+  end
+
+  SAMPLE --&gt; PREP
+
+  subgraph OUT["Output Interface"]
+    direction TB
+    FUNC["Functional Output OK / KO / UNKNOWN"]
+    BBOX_DEF["bbox_defect if KO"]
+    AUX["Auxiliary Outputs confidence, OOD score, monitoring"]
+    FUNC ~~~ BBOX_DEF
+    BBOX_DEF ~~~ AUX
+  end
+
+  PREDICTOR --&gt; FUNC
+  UQ --&gt; FUNC
+  OOD --&gt; FUNC
+  DEFECT_LOC --&gt; BBOX_DEF
+  UQ --&gt; AUX
+  OOD --&gt; AUX
+  MONITOR --&gt; AUX
+
+  subgraph QC["Quality Control"]
+    direction TB
+    STATUS["Prediction Status"]
+    TRUST["Trust Artefacts"]
+    DECISION["Operator Decision"]
+  end
+
+  FUNC --&gt; STATUS
+  BBOX_DEF --&gt; STATUS
+  AUX --&gt; TRUST
+  STATUS --&gt; DECISION
+  TRUST --&gt; DECISION
+
+  STORAGE[("Storage")]
+  BATCH["Batch Control"]
+
+  OUT --&gt; STORAGE
+  COLLECTION --&gt; STORAGE
+  DECISION --&gt; STORAGE
+  STORAGE --&gt; BATCH</code></pre>
+<p><strong>Module-by-module notes (OPTIMIZATION)</strong>:</p>
+<ul>
+<li><strong>Preprocessor</strong>: minimal — resize to a canonical size and normalize pixel intensities. No quality measurement here (deferred to post-ROI).</li>
+<li><strong>Weld Localizer</strong>: YOLOv5n outputs the weld bbox. Trained offline (see Training section). Single forward pass, ~10 ms on GPU.</li>
+<li><strong>ROI Cropper</strong>: pure utility (cv2 + small padding). Adapts the canonical size of <code>image_ROI</code> to MIL bag builder constraints.</li>
+<li><strong>Blur / Luminosity Measure</strong>: computed on <code>image_ROI</code> only. The <code>blur_level</code> and <code>luminosity_level</code> fields in the dataset metadata correspond to <strong>full-image</strong> measurements; the monitoring values used here are the <strong>ROI-restricted</strong> versions.</li>
+<li><strong>MIL Bag Builder</strong>: extracts a fixed grid of patches (or sliding window with overlap) from <code>image_ROI</code>. Each patch becomes one MIL "instance".</li>
+<li><strong>Backbone</strong>: YOLOv5s-C3CA, frozen weights from ImageNet pre-training. Outputs a feature vector per patch.</li>
+<li><strong>MIL Aggregator</strong>: attention-based pooling (Ilse et al. 2018) that learns per-patch attention weights and aggregates instance embeddings into a bag-level embedding.</li>
+<li><strong>Predictor</strong>: classification head on the bag embedding → <code>OK</code> or <code>KO</code>. Returns <code>UNKNOWN</code> if the conformal prediction set (PUNCC) is empty or if the OOD score crosses a threshold.</li>
+<li><strong>UQ (PUNCC)</strong>: conformal prediction calibrated offline — provides confidence sets with formal coverage guarantees.</li>
+<li><strong>OOD Detector (OODeel)</strong>: receives both the latent representation <strong>and</strong> geometric features of <code>bbox_weld</code> (position, size, aspect ratio relative to per-<code>(seam, resolution)</code> reference). Geometric drift = early OOD signal.</li>
+<li><strong>Online Monitoring</strong>: aggregates <code>blur_ROI</code>, <code>luminosity_ROI</code>, <code>bbox_weld</code> features and OOD score into rolling-window indicators of operational drift.</li>
+<li><strong>Defect Localizer</strong>: when <code>KO</code>, picks the patch(es) with the highest MIL attention weight and projects their position back into <code>image_ROI</code> coordinates → <code>bbox_defect</code>. Weakly-supervised localization.</li>
+</ul>
 <hr />
 <h2 id="2-training-architecture">2. Training Architecture</h2>
 <p>The training architecture describes how each component of the operation pipeline is built. It uses the same structure as the operation architecture, with a color-coding system indicating how each block is trained or constructed.</p>
@@ -1106,6 +1290,98 @@
 <li><strong>Secondary metrics</strong>: overall accuracy, recall NOK, ECE (calibration error)</li>
 <li><strong>Early stopping</strong>: triggered when validation F1-score on KO class plateaus for N consecutive epochs</li>
 <li><strong>Inference time check</strong>: each CNN must meet &lt; 1/12s per image on target hardware</li>
+</ul>
+<p><strong>Alternative explored — not adopted.</strong> Two models are trained sequentially: first the Weld Localizer (Stage 1), then the MIL classifier (Stage 2). Trustworthy modules (UQ, OOD, monitoring) are calibrated on a separate calibration set. Pseudo-labels for <code>bbox_weld</code> are generated offline with SAM.</p>
+<pre class="mermaid"><code>flowchart LR
+  classDef blue   fill:#4a90d9,stroke:#2c5f8a,color:#fff
+  classDef orange fill:#e67e22,stroke:#b35a0a,color:#fff
+  classDef green  fill:#27ae60,stroke:#1a7a42,color:#fff
+  classDef purple fill:#8e44ad,stroke:#6c3483,color:#fff
+
+  PRETRAINED["YOLOv5 weights pre-trained on ImageNet"]
+  AIC_SPEC["AIC Design Specification"]
+
+  subgraph DATA["Data"]
+    direction TB
+    DB1[("Post-op data and feedback")]
+    DB2[("Historical and synthetic data")]
+    DB1 ~~~ DB2
+  end
+
+  subgraph SAM_BLOCK["Offline Pseudo-labelling"]
+    SAM["SAM Segment Anything offline"]
+    BBOX_PSEUDO["bbox_weld pseudo-labels"]
+    SAM --&gt; BBOX_PSEUDO
+  end
+
+  DATA --&gt; SAM
+
+  subgraph TRAINING["AI Component — Training"]
+    direction LR
+
+    subgraph DATASETS["Datasets"]
+      direction TB
+      TRAIN_LOC[("Training Stage 1 image, bbox_weld_pseudo")]
+      TRAIN_MIL[("Training Stage 2 image_ROI, label OK/KO")]
+      CAL_SET[("Calibration UQ, OOD, monitoring")]
+      TRAIN_LOC ~~~ TRAIN_MIL
+      TRAIN_MIL ~~~ CAL_SET
+    end
+
+    DATASETS --&gt; PREP["Preprocessor"]
+
+    PREP --&gt; WL_TRAIN["Weld Localizer YOLOv5n training"]
+    WL_TRAIN --&gt; ROI_CROP["ROI Cropper image_ROI"]
+
+    ROI_CROP --&gt; BAG["MIL Bag Builder"]
+    BAG --&gt; BACKBONE["Backbone YOLOv5s-C3CA frozen"]
+    BACKBONE --&gt; LATENT["Latent Space"]
+    LATENT --&gt; MILPOOL["MIL Aggregator attention training"]
+    MILPOOL --&gt; PREDICTOR["Predictor training class-imbalance loss"]
+
+    MILPOOL --&gt; UQ_CAL["UQ Calibration PUNCC conformal"]
+    MILPOOL --&gt; OOD_CAL["OOD Calibration OODeel"]
+    ROI_CROP --&gt; MON_CAL["Monitoring Calibration thresholds blur, lumi, bbox_weld"]
+    LATENT --&gt; MON_CAL
+    WL_TRAIN --&gt; MON_CAL
+
+    DATASETS --&gt; DATA_METRICS["Data Metrics diversity, imbalance"]
+
+    class WL_TRAIN,ROI_CROP purple
+    class PREP,BAG orange
+    class BACKBONE,LATENT,MILPOOL,PREDICTOR blue
+    class UQ_CAL,OOD_CAL,MON_CAL green
+
+    subgraph IU["Interdependent Updates"]
+      direction TB
+      MW["Model Weights weld localizer, MIL pooling, predictor"]
+      PE["Probability Estimates PUNCC scores"]
+      TV["Threshold Values OOD, UNKNOWN, monitoring"]
+      UAHP["User-adjustable Hyper-params"]
+      MW ~~~ PE
+      PE ~~~ TV
+      TV ~~~ UAHP
+    end
+  end
+
+  BBOX_PSEUDO --&gt; TRAIN_LOC
+  PRETRAINED --&gt; WL_TRAIN
+  PRETRAINED --&gt; BACKBONE
+  PRETRAINED --&gt; IU
+  AIC_SPEC --&gt; TRAINING
+  DATA --&gt; DATASETS
+  UQ_CAL --&gt; IU
+  OOD_CAL --&gt; IU
+  MON_CAL --&gt; IU
+  DATA_METRICS --&gt; IU
+
+  IU --&gt; AIC_CAL["AIC Design Calibration"]</code></pre>
+<p><strong>Training notes (OPTIMIZATION)</strong>:</p>
+<ul>
+<li><strong>Pseudo-labelling step (offline)</strong>: SAM is run once on the dataset to generate weld masks; bounding boxes are extracted and stored as <code>bbox_weld_pseudo</code>. As fallback when SAM fails (low-quality mask or weld not found), a <strong>static ROI per <code>(seam, resolution)</code></strong> is used (the camera viewpoint is fixed per seam, so a per-group default ROI is reasonable).</li>
+<li><strong>Stage 1 training</strong>: YOLOv5n is fine-tuned from ImageNet weights on <code>(image, bbox_weld_pseudo)</code> pairs. Single-class detection task ("weld").</li>
+<li><strong>Stage 2 training</strong>: the YOLOv5s-C3CA backbone stays <strong>frozen</strong>; only the MIL attention pooling module and the classifier head are trained. Loss adapted to the <strong>97.8% / 2.2% OK/KO imbalance</strong> (focal loss or class weights).</li>
+<li><strong>Calibration sets</strong> are kept disjoint from training to preserve PUNCC's conformal coverage guarantees and OODeel's validation.</li>
 </ul>
 <hr />
 <h2 id="3-evaluation-architecture">3. Evaluation Architecture</h2>
