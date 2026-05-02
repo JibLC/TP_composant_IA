@@ -782,6 +782,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-potential-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Potential Optimization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Potential Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-operation-architecture-optimization-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Operation Architecture (Optimization case)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-training-architecture-optimization-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Training Architecture (Optimization case)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-evaluation-architecture-optimization-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Evaluation Architecture (Optimization case)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1204,11 +1254,11 @@
 <li><strong>Storage</strong>: logging of all predictions, decisions, and images</li>
 <li><strong>Batch Control</strong>: systemic issue detection from stored data</li>
 </ul>
-<h1 id="5-potential-optimization">5. Potential Optimization</h1>
+<h2 id="5-potential-optimization">5. Potential Optimization</h2>
 <p>In addition to the BASE CASE Architectures presented in sections 1, 2 &amp; 3 on which the all AI component is described, we propose as a possible optimisation, an architecture based on MIL (Multi Instance Learning) expected to allow the localisation of the defaults to help the Operator to identify faster the default and allow Quality Officer and technical team (Data &amp; ML Engineer) to understand what the AI component detectes as a default on the image to provide some explainability.</p>
 <p>The OPTIMIZATION approach implements a <strong>2-stage pipeline</strong> designed for weakly-supervised defect detection. Image-level labels (<code>OK</code> / <code>KO</code>) are the only supervision available — no defect bounding-box annotations exist, hence the choice of MIL for defect classification.</p>
 <p>This optimisation architectures are TO BE INVESTIGATED FURTHER  </p>
-<h2 id="51-operation-architecture">5.1 Operation Architecture</h2>
+<h3 id="51-operation-architecture-optimization-case">5.1 Operation Architecture (Optimization case)</h3>
 <pre class="mermaid"><code>flowchart LR
   classDef blue   fill:#4a90d9,stroke:#2c5f8a,color:#fff
   classDef orange fill:#e67e22,stroke:#b35a0a,color:#fff
@@ -1301,7 +1351,7 @@
   COLLECTION --&gt; STORAGE
   DECISION --&gt; STORAGE
   STORAGE --&gt; BATCH</code></pre>
-<h2 id="52-training-architecture">5.2 Training Architecture</h2>
+<h3 id="52-training-architecture-optimization-case">5.2 Training Architecture (Optimization case)</h3>
 <pre class="mermaid"><code>flowchart LR
   classDef blue   fill:#4a90d9,stroke:#2c5f8a,color:#fff
   classDef orange fill:#e67e22,stroke:#b35a0a,color:#fff
@@ -1386,7 +1436,7 @@
   DATA_METRICS --&gt; IU
 
   IU --&gt; AIC_CAL["AIC Design Calibration"]</code></pre>
-<h2 id="53-evaluation-architecture">5.3 Evaluation Architecture</h2>
+<h3 id="53-evaluation-architecture-optimization-case">5.3 Evaluation Architecture (Optimization case)</h3>
 <pre class="mermaid"><code>flowchart LR
   classDef blue   fill:#4a90d9,stroke:#2c5f8a,color:#fff
   classDef orange fill:#e67e22,stroke:#b35a0a,color:#fff
