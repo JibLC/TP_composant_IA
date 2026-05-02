@@ -664,6 +664,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#odd-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ODD monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -890,7 +901,13 @@ As the primary human responsible of the weld defaults detection and main user of
 </ul>
 <p>2 screens should be used by the operator:</p>
 <h3 id="operator-screen-1-touch">Operator Screen 1 (touch):</h3>
-<p><img alt="Operator Screen 1 (touch)" src="screen%201%20%28touch%29.png" /></p>
+<p>inputs:
+- series of successive images<br />
+- associated meta data (weld id &amp; timestap)<br />
+- prediction<br />
+- probability for each prediction class (OK / KO / UNKNOWN)
+<img alt="Operator Screen 1 (touch)" src="screen%201%20%28touch%29.png" />
+To be added : prediction probability for each prediction class </p>
 <h3 id="operator-screen-2-metrics-warning-alarm-raising">Operator Screen 2 (metrics &amp; warning / alarm raising)</h3>
 <p>A second Screen (not necessarily touch) should display the following artefacts</p>
 <h3 id="latency-monitoring">Latency monitoring</h3>
@@ -899,6 +916,9 @@ As the primary human responsible of the weld defaults detection and main user of
 <h3 id="quality-monitoring">Quality monitoring</h3>
 <p>(for real time increasing default rate detection)
 <img alt="Quality Monitoring" src="quality_monitoring.png" /></p>
+<h3 id="odd-monitoring">ODD monitoring</h3>
+<p>(for real time OOD detection)
+<img alt="ODD Monitoring" src="odd_monitoring.png" /></p>
 <h2 id="project-manager">Project Manager</h2>
 <h2 id="quality-supervisor">Quality supervisor</h2>
 <h2 id="ai-engineer">AI Engineer</h2>
