@@ -618,7 +618,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="1.1 Operator (Production Line - OP 120)">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#operator-screen-1-touch" class="md-nav__link">
@@ -640,7 +641,8 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="Operator Screen 2 (metrics &amp; warning / alarm raising)">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#latency-monitoring" class="md-nav__link">
@@ -686,6 +688,16 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
           <li class="md-nav__item">
   <a href="#12-product-owner" class="md-nav__link">
     <span class="md-ellipsis">
@@ -698,10 +710,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#13-quality-safety-officer" class="md-nav__link">
+  <a href="#13-quality-officer" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.3 Quality &amp; Safety Officer
+        1.3 Quality Officer
       
     </span>
   </a>
@@ -721,39 +733,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-artefact-mapping-to-lifecycle-phases" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Artefact Mapping to Lifecycle Phases
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-visual-representation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Visual Representation
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-phase-usage-summary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Phase Usage Summary
-      
-    </span>
-  </a>
   
 </li>
       
@@ -880,7 +859,7 @@
 <p>We will consider the following stakeholders:<br />
 - Operator<br />
 - Product Owner<br />
-- Quality &amp; Safety Officer<br />
+- Quality Officer<br />
 - Technical Team (Data Engineers / ML Engineers)<br />
 to which various artefacts are associated  </p>
 <h3 id="11-operator-production-line-op-120">1.1 Operator (Production Line - OP 120)</h3>
@@ -935,7 +914,7 @@ As the primary human responsible of the weld defaults detection and main user of
 <strong>Aggregation method</strong>: per-image display (no aggregation), batch summary uses simple counts and moving averages
 <strong>Phase</strong>: Operation only</p>
 <p>2 screens should be used by the operator:</p>
-<h3 id="operator-screen-1-touch">Operator Screen 1 (touch):</h3>
+<h4 id="operator-screen-1-touch">Operator Screen 1 (touch):</h4>
 <p>inputs:<br />
 - series of successive images<br />
 - associated meta data (weld id &amp; timestamp)<br />
@@ -943,20 +922,20 @@ As the primary human responsible of the weld defaults detection and main user of
 - probability for each prediction class (OK / KO / UNKNOWN)
 <img alt="Operator Screen 1 (touch)" src="screen%201%20%28touch%29.png" />
 To be added on such a screen : prediction probability for each prediction class </p>
-<h3 id="operator-screen-2-metrics-warning-alarm-raising">Operator Screen 2 (metrics &amp; warning / alarm raising)</h3>
+<h4 id="operator-screen-2-metrics-warning-alarm-raising">Operator Screen 2 (metrics &amp; warning / alarm raising)</h4>
 <p>A second Screen (not necessarily touch) should display the following artefacts
 (Warning : The following artefacts for Operator Screen 2 have been prepared on synthetic data sometimes based on actual distributions &amp; thresholds as determined by analysis of the dataset)</p>
-<h3 id="latency-monitoring">Latency monitoring</h3>
+<h5 id="latency-monitoring">Latency monitoring</h5>
 <p>(for real time anomaly detection)
 <img alt="Latency Monitoring" src="latency_monitoring.png" /></p>
-<h3 id="quality-monitoring">Quality monitoring</h3>
+<h5 id="quality-monitoring">Quality monitoring</h5>
 <p>(for real time increasing default rate detection)
 <img alt="Quality Monitoring" src="quality_monitoring.png" />
 The lower diagram shows what a typical drop of OK rate could look like</p>
-<h3 id="odd-monitoring">ODD monitoring</h3>
+<h5 id="odd-monitoring">ODD monitoring</h5>
 <p>(for real time OOD detection)
 <img alt="ODD Monitoring" src="odd_monitoring.png" /></p>
-<h3 id="data-drift">Data drift</h3>
+<h5 id="data-drift">Data drift</h5>
 <p>A specific dashboard should be added to allow the operator to detect and raise warnings in case of data drift</p>
 <h3 id="12-product-owner">1.2 Product Owner</h3>
 <p>The Product Owner (PO) is the ultimate responsable of the AI component in all its aspects and all its phases (development, training, validation, operation, maintenance). As such he is part of the audience of any artefact created in the project.<br />
@@ -979,11 +958,11 @@ In addition to artefacts mainly dedicated to other stakeholders, the PO should h
 </li>
 <li>
 <p><strong>Phase</strong>: Operation<br />
-<img alt="Evaluation report" src="PO_Operation_follow-up_dashboard.png" />
+<img alt="Operation Follow-up reports" src="PO_Operation_follow-up_dashboard.png" />
 (Wireframe generated with Claude Design)</p>
 </li>
 </ul>
-<h3 id="13-quality-safety-officer">1.3 Quality &amp; Safety Officer</h3>
+<h3 id="13-quality-officer">1.3 Quality Officer</h3>
 <ul>
 <li><strong>Artefact</strong>: Compliance and reliability report.</li>
 <li><strong>Content</strong>:</li>
@@ -1004,33 +983,30 @@ In addition to artefacts mainly dedicated to other stakeholders, the PO should h
 </li>
 <li>
 <p><strong>Phase</strong>: Operation<br />
-<img alt="Operation Follow-up" src="QO_operation_follow_up.png" /><br />
+<img alt="Operation Follow-up reports" src="QO_operation_follow_up.png" /><br />
 (Wireframe generated with Claude Design)</p>
 </li>
 </ul>
 <h3 id="14-technical-team-data-engineers-ml-engineers">1.4 Technical Team (Data Engineers / ML Engineers)</h3>
-<p>As part of the training phase, many diagrams should be produced by the Data Scientists to investigate each new dataset and produced synthetic data in terms of:
-- outliers
-- different types of point of view &amp; resolution of images
-- ODD criterias
+<p>As part of the development phase, many diagrams should be produced by the Data Engineers in order to investigate each new dataset and produced synthetic data in terms of:<br />
+- outliers<br />
+- different types of point of view &amp; resolution of images<br />
+- ODD criterias<br />
 They may use in particular the DebiAI library built by IRT System X.
 Just to give a typical exemple, here is a typical artefact that shows how blur distribution &amp; threshold can be observed for various weld types:
 <img alt="Blur distribution &amp; threshold" src="Data_Engineer_blur_distrib.png" /></p>
-<ul>
-<li><strong>Content</strong>:</li>
-<li><strong>During development</strong>: training loss curves, F1-score evolution per epoch, train/val gap (overfitting detection), data quality metrics (class distribution, annotation consistency, ODD coverage)</li>
-<li><strong>During evaluation</strong>: detailed confusion matrices, ECE and Brier score analysis, per-class and per-seam performance breakdown, robustness curves per perturbation type and intensity level, generalization performance on unseen seams (C19/C34/C101)</li>
-<li><strong>During operation</strong>: real-time monitoring dashboard — confidence score distribution, Unknown rate trends, OOD detection frequency, drift indicators, latency tracking, operator feedback log</li>
-<li><strong>KPIs used</strong>: all 13 KPIs at full granularity</li>
-<li><strong>Aggregation method</strong>: no aggregation for development/evaluation (raw metrics), moving averages and trend detection for operation monitoring</li>
-<li><strong>Phase</strong>: Training, Evaluation, Operation</li>
-</ul>
-<h2 id="2-artefact-mapping-to-lifecycle-phases">2. Artefact Mapping to Lifecycle Phases</h2>
+<p>For the ML Engineer other specific artefacts should be considered as follows:
+  - <strong>During development</strong>: training loss curves, F1-score evolution per epoch, train/val gap (overfitting detection), data quality metrics (class distribution, annotation consistency, ODD coverage)
+  - <strong>During evaluation</strong>: detailed confusion matrices, ECE and Brier score analysis, per-class and per-seam performance breakdown, robustness curves per perturbation type and intensity level, generalization performance on unseen seams (C19/C34/C101)
+  - <strong>During operation</strong>: real-time monitoring dashboard — confidence score distribution, Unknown rate trends, OOD detection frequency, drift indicators, latency tracking, operator feedback log
+- <strong>KPIs used</strong>: all 13 KPIs at full granularity
+- <strong>Aggregation method</strong>: no aggregation for development/evaluation (raw metrics), moving averages and trend detection for operation monitoring</p>
+<h1 id="2-artefact-mapping-to-lifecycle-phases">2. Artefact Mapping to Lifecycle Phases</h1>
 <table>
 <thead>
 <tr>
 <th>Artefact</th>
-<th style="text-align: center;">Construction</th>
+<th style="text-align: center;">Develoment</th>
 <th style="text-align: center;">Training</th>
 <th style="text-align: center;">Evaluation</th>
 <th style="text-align: center;">Operation</th>
@@ -1038,50 +1014,50 @@ Just to give a typical exemple, here is a typical artefact that shows how blur d
 </thead>
 <tbody>
 <tr>
-<td>Operator Dashboard</td>
+<td>Operator Screens</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">X</td>
 </tr>
 <tr>
-<td>Trust Synthesis (Product Owner)</td>
+<td>Evaluation report (Product Owner)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;">X</td>
 <td style="text-align: center;"></td>
 </tr>
 <tr>
-<td>Compliance Report (Quality/Safety)</td>
+<td>Production Follow-up reports(Product Owner)</td>
 <td style="text-align: center;"></td>
 <td style="text-align: center;"></td>
-<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
 <td style="text-align: center;">X</td>
 </tr>
 <tr>
-<td>Technical Report (Data/ML Team)</td>
+<td>Evaluation report (Quality Officer)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 <td style="text-align: center;">X</td>
-<td style="text-align: center;">X</td>
-<td style="text-align: center;">X</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td>Production Follow-up reports(Quality Officer)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 <td style="text-align: center;">X</td>
 </tr>
 <tr>
-<td>Routing &amp; Preprocessing Report</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
+<td>Technical Reports (Data &amp; ML Engineers)</td>
 <td style="text-align: center;">X</td>
 <td style="text-align: center;">X</td>
-</tr>
-<tr>
-<td>Operator Efficiency Report</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
+<td style="text-align: center;">X</td>
 <td style="text-align: center;">X</td>
 </tr>
 </tbody>
 </table>
-<h2 id="3-visual-representation">3. Visual Representation</h2>
+<h1 id="3-visual-representation">3. Visual Representation</h1>
 <pre class="mermaid"><code>graph TD
     subgraph "KPIs"
         DQ[Data Quality]
@@ -1171,6 +1147,149 @@ Just to give a typical exemple, here is a typical artefact that shows how blur d
 <li><strong>Training</strong>: loss curves, F1 evolution, overfitting detection (train/val gap)</li>
 <li><strong>Evaluation</strong>: trust synthesis (radar chart), compliance report (confusion matrices, cost matrix, robustness curves), routing &amp; preprocessing analysis, go/no-go decision</li>
 <li><strong>Operation</strong>: real-time operator dashboard, continuous monitoring (confidence trends, Unknown rate, OOD frequency, drift detection), operator efficiency tracking, batch control</li>
+</ul>
+<hr />
+<h1 id="proposed-alternatives-to-compare-with-sections-3-4-above">Proposed alternatives (to compare with sections 3 &amp; 4 above)</h1>
+<h2 id="3bis-links-between-kpis-artefacts">3bis. Links between KPIs &amp; Artefacts</h2>
+<p>This diagram traces, for each artefact described in section 1, which of the 13 KPIs (defined in <a href="../kpi/"><code>docs/kpi/index.md</code></a>) feed it.</p>
+<pre class="mermaid"><code>graph LR
+    subgraph TRUST["Trust attribute KPIs"]
+        DQ[1. Data Quality]
+        TC[2. Training Convergence]
+        PERF[3. Performance]
+        UNC[4. Uncertainty]
+        ROB[5. Robustness]
+        OOD[6. OOD Monitoring]
+        GEN[7. Generalization]
+        DRIFT[8. Data Drift]
+    end
+
+    subgraph COMP["Component-specific KPIs"]
+        ROUT[9. Routing Accuracy]
+        BLUR[10. Blur Detection Quality]
+        PCNN[11. Per-CNN Performance]
+        PCOR[12. Preprocessing Correction]
+        SAMP[13. Sampling Rules Efficiency]
+    end
+
+    subgraph ART["Artefacts"]
+        OP1["Operator Screen 1 (touch)"]
+        OP2["Operator Screen 2 (monitoring)"]
+        PO_E["PO Evaluation Report"]
+        PO_O["PO Operation Follow-up Dashboard"]
+        QO_E["QO Evaluation Report"]
+        QO_O["QO Operation Follow-up Dashboard"]
+        DE["Data Engineer Reports"]
+        MLE["ML Engineer Reports"]
+    end
+
+    PERF --&gt; OP1
+    UNC --&gt; OP1
+
+    PERF --&gt; OP2
+    UNC --&gt; OP2
+    OOD --&gt; OP2
+    DRIFT --&gt; OP2
+
+    DQ --&gt; PO_E
+    TC --&gt; PO_E
+    PERF --&gt; PO_E
+    UNC --&gt; PO_E
+    ROB --&gt; PO_E
+    OOD --&gt; PO_E
+    GEN --&gt; PO_E
+    DRIFT --&gt; PO_E
+    ROUT --&gt; PO_E
+    BLUR --&gt; PO_E
+    PCNN --&gt; PO_E
+    PCOR --&gt; PO_E
+    SAMP --&gt; PO_E
+
+    PERF --&gt; PO_O
+    UNC --&gt; PO_O
+    OOD --&gt; PO_O
+    DRIFT --&gt; PO_O
+    PCNN --&gt; PO_O
+    SAMP --&gt; PO_O
+
+    PERF --&gt; QO_E
+    ROB --&gt; QO_E
+    OOD --&gt; QO_E
+    DRIFT --&gt; QO_E
+    SAMP --&gt; QO_E
+
+    PERF --&gt; QO_O
+    OOD --&gt; QO_O
+    DRIFT --&gt; QO_O
+    SAMP --&gt; QO_O
+
+    DQ --&gt; DE
+
+    DQ --&gt; MLE
+    TC --&gt; MLE
+    PERF --&gt; MLE
+    UNC --&gt; MLE
+    ROB --&gt; MLE
+    OOD --&gt; MLE
+    GEN --&gt; MLE
+    DRIFT --&gt; MLE
+    ROUT --&gt; MLE
+    BLUR --&gt; MLE
+    PCNN --&gt; MLE
+    PCOR --&gt; MLE
+    SAMP --&gt; MLE
+
+    style DQ fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style TC fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style PERF fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style UNC fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style ROB fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style OOD fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style GEN fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style DRIFT fill:#4A90D9,stroke:#2C5F8A,color:#fff
+    style ROUT fill:#5DADE2,stroke:#2C5F8A,color:#fff
+    style BLUR fill:#5DADE2,stroke:#2C5F8A,color:#fff
+    style PCNN fill:#5DADE2,stroke:#2C5F8A,color:#fff
+    style PCOR fill:#5DADE2,stroke:#2C5F8A,color:#fff
+    style SAMP fill:#5DADE2,stroke:#2C5F8A,color:#fff
+    style OP1 fill:#8E44AD,stroke:#6C3483,color:#fff
+    style OP2 fill:#8E44AD,stroke:#6C3483,color:#fff
+    style PO_E fill:#F39C12,stroke:#D68910,color:#fff
+    style PO_O fill:#F39C12,stroke:#D68910,color:#fff
+    style QO_E fill:#E74C3C,stroke:#C0392B,color:#fff
+    style QO_O fill:#E74C3C,stroke:#C0392B,color:#fff
+    style DE fill:#2ECC71,stroke:#27AE60,color:#fff
+    style MLE fill:#2ECC71,stroke:#27AE60,color:#fff</code></pre>
+<p><strong>Color legend:</strong>
+- 🔵 Trust attribute KPIs (1–8) and component-specific KPIs (9–13)
+- 🟣 Operator artefacts
+- 🟠 Product Owner artefacts
+- 🔴 Quality Officer artefacts
+- 🟢 Technical Team artefacts</p>
+<h2 id="4bis-artefacts-per-phase">4bis. Artefacts per Phase</h2>
+<p>This view lists, for each lifecycle phase, the artefacts produced and their main content. It complements section 2 (which is a binary mapping table) by giving the actual deliverables.</p>
+<h3 id="construction">Construction</h3>
+<ul>
+<li><strong>Data Engineer reports</strong> — dataset investigation: outliers, distribution of points of view and image resolutions, ODD criteria coverage per weld type (e.g. blur distribution &amp; threshold per seam — see <a href="Data_Engineer_blur_distrib.png">Data_Engineer_blur_distrib.png</a>). Tools include the DebiAI library (IRT System X).</li>
+<li><strong>ML Engineer reports</strong> — class distribution, annotation consistency between operator and expert, ODD coverage assessment.</li>
+</ul>
+<h3 id="training">Training</h3>
+<ul>
+<li><strong>ML Engineer reports</strong> — training loss curves, F1-score evolution per epoch on validation set, train/val gap monitoring for overfitting detection.</li>
+</ul>
+<h3 id="evaluation">Evaluation</h3>
+<ul>
+<li><strong>PO Evaluation Report</strong> — radar chart of the 6 trust attributes, pass/fail status per attribute, weighted global trust score, go/no-go deployment recommendation.</li>
+<li><strong>QO Evaluation Report</strong> — confusion matrices per seam type (C20/C33/C102), operational cost matrix (asymmetric weighting of false negatives), ΔF1 per perturbation type with ODD compliance, AUROC OOD, data drift behavior under increasing degradation.</li>
+<li><strong>ML Engineer reports</strong> — detailed per-class and per-seam breakdowns, ECE and Brier score analysis, robustness curves per perturbation type and intensity, generalization performance on unseen seams (C19/C34/C101).</li>
+</ul>
+<h3 id="operation">Operation</h3>
+<ul>
+<li><strong>Operator Screen 1 (touch)</strong> — live stream of weld images with prediction (OK/KO/UNKNOWN) and per-class probability; selection &amp; validation of OK images.</li>
+<li><strong>Operator Screen 2 (monitoring)</strong> — latency monitoring vs acceptance limit, quality monitoring (OK/KO/UNKNOWN rates vs allowable limits), ODD monitoring (luminosity, blur, rotation, position vs ODD range), data drift dashboard, alarm raising.</li>
+<li><strong>PO Operation Follow-up Dashboard</strong> — live trust radar per AI Component version, cross-version comparison, trend analysis.</li>
+<li><strong>QO Operation Follow-up Dashboard</strong> — live confusion matrix, operator correction patterns, missed defect estimates from batch control.</li>
+<li><strong>ML Engineer reports</strong> — real-time confidence score distribution, Unknown rate trends, OOD detection frequency, drift indicators, latency tracking, operator feedback log.</li>
 </ul>
 
 
