@@ -610,15 +610,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#11-operator-production-line-op-120" class="md-nav__link">
+  <a href="#11-operator" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1.1 Operator (Production Line - OP 120)
+        1.1 Operator
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1.1 Operator (Production Line - OP 120)">
+    <nav class="md-nav" aria-label="1.1 Operator">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -862,7 +862,7 @@
 - Quality Officer<br />
 - Technical Team (Data Engineers / ML Engineers)<br />
 to which various artefacts are associated  </p>
-<h3 id="11-operator-production-line-op-120">1.1 Operator (Production Line - OP 120)</h3>
+<h3 id="11-operator">1.1 Operator</h3>
 <p>As an operations centered developement we shall consider first the point of view of the operator.
 As the primary human responsible of the weld defaults detection and main user of the AI component, the operator has the folowwing requirements:</p>
 <ul>
@@ -995,12 +995,12 @@ In addition to artefacts mainly dedicated to other stakeholders, the PO should h
 They may use in particular the DebiAI library built by IRT System X.
 Just to give a typical exemple, here is a typical artefact that shows how blur distribution &amp; threshold can be observed for various weld types:
 <img alt="Blur distribution &amp; threshold" src="Data_Engineer_blur_distrib.png" /></p>
-<p>For the ML Engineer other specific artefacts should be considered as follows:
-  - <strong>During development</strong>: training loss curves, F1-score evolution per epoch, train/val gap (overfitting detection), data quality metrics (class distribution, annotation consistency, ODD coverage)
-  - <strong>During evaluation</strong>: detailed confusion matrices, ECE and Brier score analysis, per-class and per-seam performance breakdown, robustness curves per perturbation type and intensity level, generalization performance on unseen seams (C19/C34/C101)
-  - <strong>During operation</strong>: real-time monitoring dashboard — confidence score distribution, Unknown rate trends, OOD detection frequency, drift indicators, latency tracking, operator feedback log
-- <strong>KPIs used</strong>: all 13 KPIs at full granularity
-- <strong>Aggregation method</strong>: no aggregation for development/evaluation (raw metrics), moving averages and trend detection for operation monitoring</p>
+<p>For the ML Engineer other specific artefacts should be considered as follows:<br />
+  - <strong>During development</strong>: training loss curves, F1-score evolution per epoch, train/val gap (overfitting detection), data quality metrics (class distribution, annotation consistency, ODD coverage)<br />
+  - <strong>During evaluation</strong>: detailed confusion matrices, ECE and Brier score analysis, per-class and per-seam performance breakdown, robustness curves per perturbation type and intensity level, generalization performance on unseen seams (C19/C34/C101)<br />
+  - <strong>During operation</strong>: real-time monitoring dashboard — confidence score distribution, Unknown rate trends, OOD detection frequency, drift indicators, latency tracking, operator feedback log<br />
+- <strong>KPIs used</strong>: all 13 KPIs at full granularity<br />
+- <strong>Aggregation method</strong>: no aggregation for development/evaluation (raw metrics), moving averages and trend detection for operation monitoring  </p>
 <h1 id="2-artefact-mapping-to-lifecycle-phases">2. Artefact Mapping to Lifecycle Phases</h1>
 <table>
 <thead>
@@ -1057,101 +1057,8 @@ Just to give a typical exemple, here is a typical artefact that shows how blur d
 </tr>
 </tbody>
 </table>
-<h1 id="3-visual-representation">3. Visual Representation</h1>
-<pre class="mermaid"><code>graph TD
-    subgraph "KPIs"
-        DQ[Data Quality]
-        TC[Training Convergence]
-        PERF[Performance]
-        UNC[Uncertainty]
-        ROB[Robustness]
-        OOD[OOD Monitoring]
-        GEN[Generalization]
-        DRIFT[Data Drift]
-        ROUT[Routing Accuracy]
-        BLUR[Blur Detection Quality]
-        PCNN[Per-CNN Performance]
-        PCOR[Preprocessing Correction]
-        SAMP[Sampling Rules Efficiency]
-    end
-
-    subgraph "Artefacts"
-        OP_DASH[🖥️ Operator Dashboard\nreal-time per-image display]
-        PO_REPORT[📊 Trust Synthesis\nradar chart + go/no-go]
-        QA_REPORT[📋 Compliance Report\ncost matrix + robustness]
-        TECH_REPORT[🔧 Technical Report\nfull metrics + monitoring]
-        ROUT_REPORT[⚙️ Routing &amp; Preprocessing\nper-CNN comparison]
-        OP_EFF[👤 Operator Efficiency\ncorrection patterns]
-    end
-
-    PERF --&gt; OP_DASH
-    UNC --&gt; OP_DASH
-    OOD --&gt; OP_DASH
-
-    DQ --&gt; PO_REPORT
-    TC --&gt; PO_REPORT
-    PERF --&gt; PO_REPORT
-    UNC --&gt; PO_REPORT
-    ROB --&gt; PO_REPORT
-    OOD --&gt; PO_REPORT
-    GEN --&gt; PO_REPORT
-    DRIFT --&gt; PO_REPORT
-    ROUT --&gt; PO_REPORT
-    PCNN --&gt; PO_REPORT
-
-    PERF --&gt; QA_REPORT
-    ROB --&gt; QA_REPORT
-    OOD --&gt; QA_REPORT
-    DRIFT --&gt; QA_REPORT
-    SAMP --&gt; QA_REPORT
-
-    DQ --&gt; TECH_REPORT
-    TC --&gt; TECH_REPORT
-    PERF --&gt; TECH_REPORT
-    UNC --&gt; TECH_REPORT
-    ROB --&gt; TECH_REPORT
-    OOD --&gt; TECH_REPORT
-    GEN --&gt; TECH_REPORT
-    DRIFT --&gt; TECH_REPORT
-
-    ROUT --&gt; ROUT_REPORT
-    BLUR --&gt; ROUT_REPORT
-    PCNN --&gt; ROUT_REPORT
-    PCOR --&gt; ROUT_REPORT
-
-    SAMP --&gt; OP_EFF
-    PERF --&gt; OP_EFF
-
-    style DQ fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style TC fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style PERF fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style UNC fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style ROB fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style OOD fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style GEN fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style DRIFT fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style ROUT fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style BLUR fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style PCNN fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style PCOR fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style SAMP fill:#4A90D9,stroke:#2C5F8A,color:#fff
-    style OP_DASH fill:#8E44AD,stroke:#6C3483,color:#fff
-    style PO_REPORT fill:#F39C12,stroke:#D68910,color:#fff
-    style QA_REPORT fill:#E74C3C,stroke:#C0392B,color:#fff
-    style TECH_REPORT fill:#2ECC71,stroke:#27AE60,color:#fff
-    style ROUT_REPORT fill:#2ECC71,stroke:#27AE60,color:#fff
-    style OP_EFF fill:#F39C12,stroke:#D68910,color:#fff</code></pre>
-<h2 id="4-phase-usage-summary">4. Phase Usage Summary</h2>
-<ul>
-<li><strong>Construction</strong>: data quality reports (class distribution, annotation consistency, ODD coverage)</li>
-<li><strong>Training</strong>: loss curves, F1 evolution, overfitting detection (train/val gap)</li>
-<li><strong>Evaluation</strong>: trust synthesis (radar chart), compliance report (confusion matrices, cost matrix, robustness curves), routing &amp; preprocessing analysis, go/no-go decision</li>
-<li><strong>Operation</strong>: real-time operator dashboard, continuous monitoring (confidence trends, Unknown rate, OOD frequency, drift detection), operator efficiency tracking, batch control</li>
-</ul>
-<hr />
-<h1 id="proposed-alternatives-to-compare-with-sections-3-4-above">Proposed alternatives (to compare with sections 3 &amp; 4 above)</h1>
-<h2 id="3bis-links-between-kpis-artefacts">3bis. Links between KPIs &amp; Artefacts</h2>
-<p>This diagram traces, for each artefact described in section 1, which of the 13 KPIs (defined in <a href="../kpi/"><code>docs/kpi/index.md</code></a>) feed it.</p>
+<h3 id="3-links-between-kpis-artefacts">3. Links between KPIs &amp; Artefacts</h3>
+<p>This diagram traces, for each artefact described in section 1, which of the 13 KPIs feed it.</p>
 <pre class="mermaid"><code>graph LR
     subgraph TRUST["Trust attribute KPIs"]
         DQ[1. Data Quality]
@@ -1261,16 +1168,16 @@ Just to give a typical exemple, here is a typical artefact that shows how blur d
     style DE fill:#2ECC71,stroke:#27AE60,color:#fff
     style MLE fill:#2ECC71,stroke:#27AE60,color:#fff</code></pre>
 <p><strong>Color legend:</strong>
-- 🔵 Trust attribute KPIs (1–8) and component-specific KPIs (9–13)
-- 🟣 Operator artefacts
-- 🟠 Product Owner artefacts
-- 🔴 Quality Officer artefacts
-- 🟢 Technical Team artefacts</p>
-<h2 id="4bis-artefacts-per-phase">4bis. Artefacts per Phase</h2>
+- 🔵 Trust attribute KPIs (1–8) and component-specific KPIs (9–13)<br />
+- 🟣 Operator artefacts<br />
+- 🟠 Product Owner artefacts<br />
+- 🔴 Quality Officer artefacts<br />
+- 🟢 Technical Team artefacts  </p>
+<h2 id="4-artefacts-per-phase">4. Artefacts per Phase</h2>
 <p>This view lists, for each lifecycle phase, the artefacts produced and their main content. It complements section 2 (which is a binary mapping table) by giving the actual deliverables.</p>
 <h3 id="construction">Construction</h3>
 <ul>
-<li><strong>Data Engineer reports</strong> — dataset investigation: outliers, distribution of points of view and image resolutions, ODD criteria coverage per weld type (e.g. blur distribution &amp; threshold per seam — see <a href="Data_Engineer_blur_distrib.png">Data_Engineer_blur_distrib.png</a>). Tools include the DebiAI library (IRT System X).</li>
+<li><strong>Data Engineer reports</strong> — dataset investigation: outliers, distribution of points of view and image resolutions, ODD criteria coverage per weld type (e.g. blur distribution &amp; threshold per seam). Tools include the DebiAI library (IRT System X).</li>
 <li><strong>ML Engineer reports</strong> — class distribution, annotation consistency between operator and expert, ODD coverage assessment.</li>
 </ul>
 <h3 id="training">Training</h3>
